@@ -1,3 +1,47 @@
 <resources>
-    <string name="app_name">Sarisarimaximus</string>
+    <string name="app_name">Sales App</string>
+    <string name="store_1">Store 1</string>
+    <string name="all">All</string>
+    <string name="condiments">Condiments</string>
+    <string name="drinks">Drinks</string>
+    <string name="junk_food">Junk Food</string>
+    <string name="bread">Bread</string>
+    <string name="canned_goods">Canned Goods</string>
+
+    <!-- Product Names from previous screen -->
+    <string name="piattos_cheese">Piattos - Cheese</string>
+    <string name="magic_sarap">Magic Sarap</string>
+    <string name="heinz_ketchup">Heinz Ketchup</string>
+    <string name="cdo_corned_beef">CDO Corned Beef</string>
+    <string name="cinnamon_roll">Cinnamon Roll</string>
+    <string name="chicharon">Chicharron ni Mang Juan</string>
+    <string name="knorr_seasoning">Knorr Liquid Seasoning</string>
+    <string name="papa_ketchup">Papa Banana Ketchup</string>
+    <string name="delmonte_ketchup">Del Monte Sweet Blend Ketchup</string>
+    <string name="silver_swan_soy">Silver Swan Soy Sauce</string>
+    <string name="coca_cola">Coca Cola - 1.5 Liter</string>
+    <string name="mountain_dew">Mountain Dew - 295 ml</string>
+    <string name="sprite">Sprite - 1.5 Liter</string>
+    <string name="yakult">Yakult</string>
+    <string name="chuckie">Chuckie Chocolate Drink - 250 ml</string>
+    <string name="loaf_bread">Gardenia Loaf Bread</string>
+    <string name="pandesal">Pandesal</string>
+    <string name="spanish_bread">Spanish Bread</string>
+    <string name="monggo_bread">Monggo Bread</string>
+    <string name="spam_classic">Spam Classic</string>
+    <string name="sardines_555">555 Sardines Tomato Sauce</string>
+    <string name="century_tuna">Century Tuna Flakes</string>
+    <string name="maling_luncheon">Maling Chicken Luncheon Meat</string>
+
+
+    <!-- Bottom Navigation -->
+    <string name="home">Home</string>
+    <string name="logging">Logging</string>
+    <string name="pos">POS</string>
+    <string name="settings">Settings</string>
+
+    <!-- Content Descriptions -->
+    <string name="menu_button">Menu</string>
+    <string name="add_item">Add new item</string>
+
 </resources>
