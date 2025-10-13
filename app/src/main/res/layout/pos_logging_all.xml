@@ -185,7 +185,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="80dp"
-                android:contentDescription="@string/cart"
                 android:src="@drawable/ic_shopping_cart"
                 app:backgroundTint="@color/appBlue"
                 app:tint="@android:color/white"

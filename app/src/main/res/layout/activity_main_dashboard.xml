@@ -117,7 +117,7 @@
                 android:id="@+id/blue_background_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="#FF"
+                android:background="#FFFFFF"
                 app:layout_constraintTop_toBottomOf="@id/store_dropdown_header"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
