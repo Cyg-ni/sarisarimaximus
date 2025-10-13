@@ -8,8 +8,6 @@
     android:background="@color/blue"
     tools:context=".MainActivity">
 
-    <!-- ✅ Top bar -->
-
     <!-- ✅ Main Content -->
     <LinearLayout
         android:id="@+id/topBar"
