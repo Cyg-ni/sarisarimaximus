@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<< HEAD
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="appBlue">#5C6BC0</color> <!-- A nice medium blue -->
     <color name="lightGray">#AFAFAF</color>
     <color name="darkText">#333333</color>
-</resources>
-=======
+
     <color name="primary">#1976D2</color>
     <color name="primary_variant">#1565C0</color>
     <color name="secondary">#03DAC5</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
     <color name="gray">#E0E0E0</color>
     <color name="blue">#566CF9</color>
 
+    <color name="colorPrimaryDark">#6275A3</color>
+    <color name="colorPrimaryLight">#B0BCE1</color>
+    <color name="textColorPrimary">#4A5B87</color>
+    <color name="dialogBackground">#F7F8FA</color>
+
 </resources>
->>>>>>> a35ad2351b3222f2efbdd77a962a147068cce843
