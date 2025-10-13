@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:padding="16dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="4dp"
+    app:cardBackgroundColor="@color/white"
+    android:layout_marginTop="-4dp">>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvSummaryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weekly Summary"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"
+            android:textColor="?attr/colorOnSurface"
+            tools:ignore="HardcodedText" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvRevenue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Revenue: ₱12,031.79"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:ignore="HardcodedText" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvTransactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transactions: 213 orders"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:ignore="HardcodedText" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvTopSelling"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top Selling Item: Instant Noodles (58 units)"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:ignore="HardcodedText" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvAverageOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Average Order Value: ₱56.50"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

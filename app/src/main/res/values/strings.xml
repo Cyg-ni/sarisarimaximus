@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <string name="app_name">Sales App</string>
     <string name="store_1">Store 1</string>
     <string name="all">All</string>
@@ -45,3 +47,8 @@
     <string name="add_item">Add new item</string>
 
 </resources>
+=======
+    <string name="app_name">SariSariSales</string>
+    <string name="chart_placeholder">Chart Placeholder</string>
+</resources>
+>>>>>>> a35ad2351b3222f2efbdd77a962a147068cce843
