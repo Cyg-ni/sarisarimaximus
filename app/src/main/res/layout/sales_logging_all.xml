@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EFEFEF"
-    tools:context=".MainActivity">
-
-    <!-- The "Sales Logging All" TextView has been removed. -->
+    tools:context=".SalesLoggingActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
@@ -19,14 +17,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">  <!-- Constraint updated from header to parent top -->
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/logging_background">
 
-            <!-- Store Title and Menu -->
             <TextView
                 android:id="@+id/tv_store_name"
                 android:layout_width="wrap_content"
@@ -40,8 +37,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-            <!-- Blue Banner Shape -->
+            <!-- Blue Banner -->
             <View
                 android:id="@+id/view_blue_banner"
                 android:layout_width="0dp"
@@ -68,40 +64,25 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-                        <TextView
-                            style="@style/CategoryTab.Selected"
-                            android:text="@string/all"/>
-                        <View
-                            android:layout_width="24dp"
-                            android:layout_height="3dp"
-                            android:layout_marginTop="4dp"
-                            android:background="@drawable/tab_indicator"/>
-                    </LinearLayout>
-
-                    <TextView style="@style/CategoryTab" android:text="@string/condiments" />
-                    <TextView style="@style/CategoryTab" android:text="@string/drinks" />
-                    <TextView style="@style/CategoryTab" android:text="@string/junk_food" />
-                    <TextView style="@style/CategoryTab" android:text="@string/bread" />
-                    <TextView style="@style/CategoryTab" android:text="@string/canned_goods" />
+                    <TextView android:id="@+id/tvAll" style="@style/CategoryTab.Selected" android:text="@string/all"/>
+                    <TextView android:id="@+id/tvCondiments" style="@style/CategoryTab" android:text="@string/condiments"/>
+                    <TextView android:id="@+id/tvDrinks" style="@style/CategoryTab" android:text="@string/drinks"/>
+                    <TextView android:id="@+id/tvJunkFood" style="@style/CategoryTab" android:text="@string/junk_food"/>
+                    <TextView android:id="@+id/tvBread" style="@style/CategoryTab" android:text="@string/bread"/>
+                    <TextView android:id="@+id/tvCannedGoods" style="@style/CategoryTab" android:text="@string/canned_goods"/>
 
                 </LinearLayout>
             </HorizontalScrollView>
 
-
-            <!-- Products Grid -->
+            <!-- ALL -->
             <ScrollView
+                android:id="@+id/gridAll"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@id/hsv_categories"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <GridLayout
                     android:layout_width="match_parent"
@@ -109,7 +90,6 @@
                     android:columnCount="2"
                     android:padding="8dp">
 
-                    <!-- Product Items -->
                     <LinearLayout style="@style/ProductItemContainer">
                         <ImageView style="@style/ProductImage" android:src="@drawable/piattos" android:contentDescription="@string/piattos_cheese"/>
                         <TextView style="@style/ProductTitle" android:text="@string/piattos_cheese"/>
@@ -147,6 +127,279 @@
                         <TextView style="@style/ProductTitle.MultiLine" android:text="@string/chicharon"/>
                     </LinearLayout>
 
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/yakult" android:contentDescription="@string/yakult"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/yakult"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/coca_cola" android:contentDescription="@string/coca_cola"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/coca_cola"/>
+                    </LinearLayout>
+
+                </GridLayout>
+            </ScrollView>
+
+            <!-- CONDIMENTS -->
+            <ScrollView
+                android:id="@+id/gridCondiments"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/hsv_categories"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:padding="8dp">
+                    <!-- Product Item 1: Knorr -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/knorr_seasoning" android:contentDescription="@string/knorr_seasoning"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/knorr_seasoning"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 2: Papa Ketchup -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/papa_ketchup" android:contentDescription="@string/papa_ketchup"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/papa_ketchup"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 3: Del Monte Ketchup -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/delmonte_ketchup" android:contentDescription="@string/delmonte_ketchup"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/delmonte_ketchup"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 4: Silver Swan -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/silver_swan_soy" android:contentDescription="@string/silver_swan_soy"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/silver_swan_soy"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 5: Vinegar -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/vinegar" android:contentDescription="@string/piattos_cheese"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/piattos_cheese"/>
+                    </LinearLayout>
+
+                    <!-- Add new item button -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <FrameLayout android:layout_width="match_parent" android:layout_height="120dp" android:background="@drawable/add_item_background">
+                            <ImageView android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="center" android:src="@drawable/ic_add"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </GridLayout>
+            </ScrollView>
+
+            <!-- DRINKS -->
+            <ScrollView
+                android:id="@+id/gridDrinks"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/hsv_categories"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:padding="8dp">
+                    <!-- Product Item 1: Coca Cola -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/coca_cola" android:contentDescription="@string/coca_cola"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/coca_cola"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 2: Mountain Dew -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/mountain_dew" android:contentDescription="@string/mountain_dew"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/mountain_dew"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 3: Sprite -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/sprite" android:contentDescription="@string/sprite"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/sprite"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 4: Yakult -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/yakult" android:contentDescription="@string/yakult"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/yakult"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 5: Chuckie -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/chuckie" android:contentDescription="@string/chuckie"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/chuckie"/>
+                    </LinearLayout>
+
+                    <!-- Add new item button -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <FrameLayout android:layout_width="match_parent" android:layout_height="120dp" android:background="@drawable/add_item_background">
+                            <ImageView android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="center" android:src="@drawable/ic_add"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </GridLayout>
+            </ScrollView>
+
+            <!-- JUNK FOOD -->
+            <ScrollView
+                android:id="@+id/gridJunkFood"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/hsv_categories"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:padding="8dp">
+                    <!-- Product Item 1: Piattos - Cheese -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/piattos" android:contentDescription="@string/piattos_cheese"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/piattos_cheese"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 2: Chicharron ni Mang Juan -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/chicharon" android:contentDescription="@string/chicharron_ni_mang_juan"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/chicharron_ni_mang_juan"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 3: Cheezy Corn Crunch -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/cheezy" android:contentDescription="@string/cheezy_corn_crunch"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/cheezy_corn_crunch"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 4: Clover Chips -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/clover" android:contentDescription="@string/clover_chips"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/clover_chips"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 5: Mr. Chips -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/mr_chips" android:contentDescription="@string/mr_chips"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/mr_chips"/>
+                    </LinearLayout>
+
+                    <!-- Add new item button -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <FrameLayout android:layout_width="match_parent" android:layout_height="120dp" android:background="@drawable/add_item_background">
+                            <ImageView android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="center" android:src="@drawable/ic_add"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </GridLayout>
+            </ScrollView>
+
+            <!-- BREAD -->
+            <ScrollView
+                android:id="@+id/gridBread"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/hsv_categories"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:padding="8dp">
+                    <!-- Product Item 1: Cinnamon Roll -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <androidx.cardview.widget.CardView style="@style/ProductImageCard">
+                            <ImageView style="@style/ProductImage.Rounded" android:src="@drawable/cinnamon_roll" android:contentDescription="@string/cinnamon_roll"/>
+                        </androidx.cardview.widget.CardView>
+                        <TextView style="@style/ProductTitle" android:text="@string/cinnamon_roll"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 2: Loaf Bread -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <androidx.cardview.widget.CardView style="@style/ProductImageCard">
+                            <ImageView style="@style/ProductImage.Rounded" android:src="@drawable/loaf_bread" android:contentDescription="@string/loaf_bread"/>
+                        </androidx.cardview.widget.CardView>
+                        <TextView style="@style/ProductTitle" android:text="@string/loaf_bread"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 3: Pandesal -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <androidx.cardview.widget.CardView style="@style/ProductImageCard">
+                            <ImageView style="@style/ProductImage.Rounded" android:src="@drawable/pandesal" android:contentDescription="@string/pandesal"/>
+                        </androidx.cardview.widget.CardView>
+                        <TextView style="@style/ProductTitle" android:text="@string/pandesal"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 4: Spanish Bread -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <androidx.cardview.widget.CardView style="@style/ProductImageCard">
+                            <ImageView style="@style/ProductImage.Rounded" android:src="@drawable/spanish_bread" android:contentDescription="@string/spanish_bread"/>
+                        </androidx.cardview.widget.CardView>
+                        <TextView style="@style/ProductTitle" android:text="@string/spanish_bread"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 5: Monggo Bread -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <androidx.cardview.widget.CardView style="@style/ProductImageCard">
+                            <ImageView style="@style/ProductImage.Rounded" android:src="@drawable/monggo_bread" android:contentDescription="@string/monggo_bread"/>
+                        </androidx.cardview.widget.CardView>
+                        <TextView style="@style/ProductTitle" android:text="@string/monggo_bread"/>
+                    </LinearLayout>
+
+                    <!-- Add new item button -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <FrameLayout android:layout_width="match_parent" android:layout_height="120dp" android:background="@drawable/add_item_background">
+                            <ImageView android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="center" android:src="@drawable/ic_add"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </GridLayout>
+            </ScrollView>
+
+            <!-- CANNED GOODS -->
+            <ScrollView
+                android:id="@+id/gridCannedGoods"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/hsv_categories"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:padding="8dp">
+                    <!-- Product Item 1: Spam -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/spam_classic" android:contentDescription="@string/spam_classic"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/spam_classic"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 2: CDO Corned Beef -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/cdo_corned_beef" android:contentDescription="@string/cdo_corned_beef"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/cdo_corned_beef"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 3: 555 Sardines -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/sardines_555" android:contentDescription="@string/sardines_555"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/sardines_555"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 4: Century Tuna -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/century_tuna" android:contentDescription="@string/century_tuna"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/century_tuna"/>
+                    </LinearLayout>
+
+                    <!-- Product Item 5: Maling -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <ImageView style="@style/ProductImage" android:src="@drawable/maling_luncheon" android:contentDescription="@string/maling_luncheon"/>
+                        <TextView style="@style/ProductTitle.MultiLine" android:text="@string/maling_luncheon"/>
+                    </LinearLayout>
+
+                    <!-- Add new item button -->
+                    <LinearLayout style="@style/ProductItemContainer">
+                        <FrameLayout android:layout_width="match_parent" android:layout_height="120dp" android:background="@drawable/add_item_background">
+                            <ImageView android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="center" android:src="@drawable/ic_add"/>
+                        </FrameLayout>
+                    </LinearLayout>
                 </GridLayout>
             </ScrollView>
 
@@ -164,7 +417,7 @@
 
                 <!-- Home -->
                 <LinearLayout style="@style/BottomNavItem">
-                    <ImageView style="@style/BottomNavIcon" android:src="@drawable/ic_home" android:contentDescription="@string/home"/>
+                    <ImageView style="@style/BottomNavIcon" android:id="@+id/navHome" android:src="@drawable/ic_home" android:contentDescription="@string/home"/>
                     <TextView style="@style/BottomNavText" android:text="@string/home" />
                 </LinearLayout>
                 <!-- Logging -->
@@ -174,12 +427,12 @@
                 </LinearLayout>
                 <!-- POS -->
                 <LinearLayout style="@style/BottomNavItem">
-                    <ImageView style="@style/BottomNavIcon" android:src="@drawable/ic_pos" android:contentDescription="@string/pos"/>
+                    <ImageView style="@style/BottomNavIcon" android:id="@+id/navPOS" android:src="@drawable/ic_pos" android:contentDescription="@string/pos"/>
                     <TextView style="@style/BottomNavText" android:text="@string/pos" />
                 </LinearLayout>
                 <!-- Settings -->
                 <LinearLayout style="@style/BottomNavItem">
-                    <ImageView style="@style/BottomNavIcon" android:src="@drawable/ic_settings" android:contentDescription="@string/settings"/>
+                    <ImageView style="@style/BottomNavIcon" android:id="@+id/navSettings" android:src="@drawable/ic_settings" android:contentDescription="@string/settings"/>
                     <TextView style="@style/BottomNavText" android:text="@string/settings" />
                 </LinearLayout>
 
