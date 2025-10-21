@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SariSariSales">
+
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -21,8 +22,11 @@
             </intent-filter>
         </activity>
 
-        <!-- Keep MainActivity for later -->
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".PosAllActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
     </application>
 
 </manifest>
