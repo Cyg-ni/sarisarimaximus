@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SariSariSales">
 
+        <!-- Launcher activity -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -22,10 +23,27 @@
             </intent-filter>
         </activity>
 
+        <!-- Other activities -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
         <activity
             android:name=".PosAllActivity"
             android:exported="false"
             android:theme="@style/Theme.SariSariSales" />
+
+        <activity
+            android:name=".SalesLoggingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
 
     </application>
 
