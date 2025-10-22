@@ -215,7 +215,6 @@
 
         <!-- Home -->
         <LinearLayout
-            android:id="@+id/navHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
@@ -225,6 +224,7 @@
             android:orientation="vertical"
             android:gravity="center">
             <ImageView
+                android:id="@+id/navHome"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home" />
@@ -238,7 +238,6 @@
 
         <!-- Logging -->
         <LinearLayout
-            android:id="@+id/navLogging"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
@@ -248,6 +247,7 @@
             android:orientation="vertical"
             android:gravity="center">
             <ImageView
+                android:id="@+id/navLogging"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_logging" />
@@ -261,7 +261,6 @@
 
         <!-- POS -->
         <LinearLayout
-            android:id="@+id/navPOS"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
@@ -271,6 +270,7 @@
             android:orientation="vertical"
             android:gravity="center">
             <ImageView
+                android:id="@+id/navPOS"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_pos" />
@@ -284,7 +284,6 @@
 
         <!-- Settings (current) -->
         <LinearLayout
-            android:id="@+id/navSettings"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
@@ -294,6 +293,7 @@
             android:orientation="vertical"
             android:gravity="center">
             <ImageView
+                android:id="@+id/navSettings"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_settings" />

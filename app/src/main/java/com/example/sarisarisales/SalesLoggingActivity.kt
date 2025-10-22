@@ -47,6 +47,7 @@ class SalesLoggingActivity : AppCompatActivity() {
         }
 
         setupAddItemButtons()
+        NavigationHandler.setupBottomNavBar(this)
     }
 
     private fun setupAddItemButtons() {

@@ -242,34 +242,96 @@
             <!-- Bottom Navigation Bar -->
             <LinearLayout
                 android:id="@+id/bottom_navigation"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:background="@android:color/white"
                 android:elevation="8dp"
+                android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <LinearLayout style="@style/BottomNavItem">
-                    <ImageView style="@style/BottomNavIcon" android:src="@drawable/ic_home" android:contentDescription="@string/home"/>
-                    <TextView style="@style/BottomNavText" android:text="@string/home" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/navHome"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_home"
+                        android:contentDescription="Home"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Home"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray"/>
                 </LinearLayout>
 
-                <LinearLayout style="@style/BottomNavItem.Selected">
-                    <ImageView style="@style/BottomNavIcon.Selected" android:src="@drawable/ic_logging" android:contentDescription="@string/logging"/>
-                    <TextView style="@style/BottomNavText.Selected" android:text="@string/logging" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/navLogging"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_logging"
+                        android:contentDescription="Logging"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logging"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray"/>
                 </LinearLayout>
 
-                <LinearLayout style="@style/BottomNavItem">
-                    <ImageView style="@style/BottomNavIcon" android:src="@drawable/ic_pos" android:contentDescription="@string/pos"/>
-                    <TextView style="@style/BottomNavText" android:text="@string/pos" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/navPOS"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_pos"
+                        android:contentDescription="POS"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="POS"
+                        android:textSize="12sp"
+                        android:textColor="#6A5ACD"/>
                 </LinearLayout>
 
-                <LinearLayout style="@style/BottomNavItem">
-                    <ImageView style="@style/BottomNavIcon" android:src="@drawable/ic_settings" android:contentDescription="@string/settings"/>
-                    <TextView style="@style/BottomNavText" android:text="@string/settings" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/navSettings"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_settings"
+                        android:contentDescription="Settings"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Settings"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray"/>
                 </LinearLayout>
+
             </LinearLayout>
 
             <!-- Floating Cart -->

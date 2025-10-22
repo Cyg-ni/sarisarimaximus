@@ -27,29 +27,6 @@ class SettingsActivity : AppCompatActivity() {
             // finish()
         }
 
-        // Footer buttons
-        val navHome: LinearLayout = findViewById(R.id.navHome)
-        val navLogging: LinearLayout = findViewById(R.id.navLogging)
-        val navPOS: LinearLayout = findViewById(R.id.navPOS)
-        val navSettings: LinearLayout = findViewById(R.id.navSettings)
-
-        navHome.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
-
-        navLogging.setOnClickListener {
-            startActivity(Intent(this, PosAllActivity::class.java))
-            finish()
-        }
-
-        navPOS.setOnClickListener {
-            startActivity(Intent(this, SalesLoggingActivity::class.java))
-            finish()
-        }
-
-        navSettings.setOnClickListener {
-            // Already in settings, do nothing
-        }
+        NavigationHandler.setupBottomNavBar(this)
     }
 }
