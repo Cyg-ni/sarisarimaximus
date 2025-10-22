@@ -49,6 +49,26 @@
             android:exported="false"
             android:theme="@style/Theme.SariSariSales" />
 
+        <activity
+            android:name=".SettingsAccountActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
+        <activity
+            android:name=".SettingsNotificationsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
+        <activity
+            android:name=".SettingsAppearanceActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
+        <activity
+            android:name=".SettingsHelpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
 
     </application>
 

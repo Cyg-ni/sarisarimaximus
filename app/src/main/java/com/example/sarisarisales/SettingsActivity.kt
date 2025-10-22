@@ -12,22 +12,48 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // Top buttons
+        // 🔹 Top bar buttons
         val btnBack: ImageButton = findViewById(R.id.btnBack)
         val btnDashboard: ImageButton = findViewById(R.id.btnDashboard)
-
 
         btnBack.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+
         btnDashboard.setOnClickListener {
-            // Navigate to Dashboard --> Change the values for this if there is a dashboard already
-            // startActivity(Intent(this, MainActivity::class.java))
-            // finish()
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
-        // Footer buttons
+        // 🔹 Settings items (these are LinearLayouts, not Buttons)
+        val tabAccount: LinearLayout = findViewById(R.id.tabAccount)
+        val tabNotifs: LinearLayout = findViewById(R.id.tabNotifs)
+        val tabTheme: LinearLayout = findViewById(R.id.tabTheme)
+        val tabHelp: LinearLayout = findViewById(R.id.tabHelp)
+
+        tabAccount.setOnClickListener {
+            startActivity(Intent(this, SettingsAccountActivity::class.java))
+            finish()
+        }
+
+        tabNotifs.setOnClickListener {
+            startActivity(Intent(this, SettingsNotificationsActivity::class.java))
+            finish()
+        }
+
+        tabTheme.setOnClickListener {
+            startActivity(Intent(this, SettingsAppearanceActivity::class.java))
+            finish()
+        }
+
+        tabHelp.setOnClickListener {
+            startActivity(Intent(this, SettingsHelpActivity::class.java))
+            finish()
+        }
+
+
+        // 🔹 Bottom navigation
         val navHome: LinearLayout = findViewById(R.id.navHome)
         val navLogging: LinearLayout = findViewById(R.id.navLogging)
         val navPOS: LinearLayout = findViewById(R.id.navPOS)
@@ -39,17 +65,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         navLogging.setOnClickListener {
-            startActivity(Intent(this, PosAllActivity::class.java))
-            finish()
-        }
-
-        navPOS.setOnClickListener {
             startActivity(Intent(this, SalesLoggingActivity::class.java))
             finish()
         }
 
+        navPOS.setOnClickListener {
+            startActivity(Intent(this, PosAllActivity::class.java))
+            finish()
+        }
+
         navSettings.setOnClickListener {
-            // Already in settings, do nothing
+            // Already in Settings — no action
         }
     }
 }
