@@ -61,9 +61,7 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
-            <!-- 📊 Daily Chart (white background only for charts) -->
 
-            <!-- 📈 Comparison Chart -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,6 +101,7 @@
             </LinearLayout>
 
             <!-- 🟦 Summary Button -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSummary"
                 style="@style/Widget.Material3.Button.TonalButton"
@@ -112,7 +111,7 @@
                 android:text="Summary"
                 android:textColor="@color/black"
                 app:backgroundTint="@color/white"
-                app:cornerRadius="1dp"/>
+                app:cornerRadius="1dp" />
 
             <include
                 android:id="@+id/summaryLayout"
