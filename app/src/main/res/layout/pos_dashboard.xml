@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:text="Home"
                 android:textSize="12sp"
-                android:textColor="#5C6CFF" />
+                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
 
         <!-- Logging -->
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:text="Logging"
                 android:textSize="12sp"
-                android:textColor="#5C6CFF" />
+                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
 
         <!-- POS -->
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:text="POS"
                 android:textSize="12sp"
-                android:textColor="#5C6CFF" />
+                android:textColor="#6A5ACD" />
         </LinearLayout>
 
         <!-- Settings -->
@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:text="Settings"
                 android:textSize="12sp"
-                android:textColor="#5C6CFF" />
+                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
