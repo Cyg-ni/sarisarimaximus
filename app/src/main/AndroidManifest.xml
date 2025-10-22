@@ -14,7 +14,7 @@
 
         <!-- Launcher activity -->
         <activity
-            android:name=".PosAllActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.SariSariSales">
             <intent-filter>
@@ -40,7 +40,7 @@
             android:theme="@style/Theme.SariSariSales" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".PosAllActivity"
             android:exported="false"
             android:theme="@style/Theme.SariSariSales" />
 
