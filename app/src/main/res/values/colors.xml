@@ -19,4 +19,6 @@
     <color name="textColorPrimary">#4A5B87</color>
     <color name="dialogBackground">#F7F8FA</color>
 
+    <color name="table_divider_color">#E0E0E0</color>
+
 </resources>

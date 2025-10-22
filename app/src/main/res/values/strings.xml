@@ -38,6 +38,9 @@
     <string name="mr_chips">Mr. Chips</string>
     <string name="clover_chips">Clover Chips</string>
 
+    <!-- Adding items in sales logging -->
+    <string name="new_product_image">New product image</string>
+
 
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

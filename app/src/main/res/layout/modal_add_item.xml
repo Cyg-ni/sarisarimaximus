@@ -91,7 +91,6 @@
             android:layout_marginTop="24dp"
             android:text="@string/ingredients" />
 
-        <!-- Corrected Table Layout for Ingredients -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,7 +100,6 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/table_background">
 
-            <!-- Table Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,19 +111,17 @@
 
             <View style="@style/TableHorizontalDivider"/>
 
-            <!-- Ingredient List Area (This would be a RecyclerView in a real app) -->
             <LinearLayout
                 android:id="@+id/ll_ingredient_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="80dp"
                 android:orientation="vertical">
-                <!-- Ingredient rows would be added here dynamically -->
             </LinearLayout>
 
             <View style="@style/TableHorizontalDivider"/>
 
-            <!-- User Input Row -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

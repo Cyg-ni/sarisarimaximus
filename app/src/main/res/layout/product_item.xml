@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ProductItemContainer">
+
+    <ImageView
+        android:id="@+id/productImage"
+        style="@style/ProductImage"
+        android:contentDescription="@string/new_product_image"
+        android:src="@drawable/ic_add" />
+
+    <TextView
+        android:id="@+id/productTitle"
+        style="@style/ProductTitle"
+        tools:text="New Product Name" />
+
+</LinearLayout>
