@@ -1,30 +1,20 @@
 package com.example.sarisarisales
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.sarisarisales.databinding.ActivityWeeklyTransactionsBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityWeeklyTransactionsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityWeeklyTransactionsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main_dashboard) //MainActivity layout
 
-        // Toggle Summary
-        binding.btnSummary.setOnClickListener {
-            toggleVisibility(binding.summaryLayout.root)
+        val btnWeekly: Button? = findViewById(R.id.check_sales_button)
+        btnWeekly?.setOnClickListener {
+            startActivity(Intent(this, WeeklyTransactionsActivity::class.java))
         }
 
-        // Toggle Transaction History
-        binding.btnTransactionHistory.setOnClickListener {
-            toggleVisibility(binding.transactionHistoryLayout.root)
-        }
-    }
-
-    private fun toggleVisibility(view: View) {
-        view.visibility = if (view.visibility == View.VISIBLE) View.GONE else View.VISIBLE
     }
 }
