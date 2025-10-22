@@ -35,6 +35,11 @@
             android:theme="@style/Theme.SariSariSales" />
 
         <activity
+            android:name=".WeeklyTransactionsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
+        <activity
             android:name=".PosAllActivity"
             android:exported="false"
             android:theme="@style/Theme.SariSariSales" />

@@ -10,10 +10,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // auto-navigate to SettingsActivity after 1 second (for testing)
-        // Handler(mainLooper).postDelayed({
-            // startActivity(Intent(this, SettingsActivity::class.java))
-            // finish() // TO CHECK IF BUTTON IS WORKING
-        } // , 1000)
+         // auto-navigate to SettingsActivity after 1 second (for testing)
+         Handler(mainLooper).postDelayed({
+             startActivity(Intent(this, SettingsActivity::class.java))
+             finish() // TO CHECK IF BUTTON IS WORKING
+        }  , 1000)
     }
-// }
+ }
