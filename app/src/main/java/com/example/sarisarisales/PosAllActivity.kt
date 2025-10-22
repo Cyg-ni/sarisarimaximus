@@ -38,5 +38,6 @@ class PosAllActivity : AppCompatActivity() {
                 tab.setTextAppearance(R.style.CategoryTabActive)
             }
         }
+        NavigationHandler.setupBottomNavBar(this)
     }
 }

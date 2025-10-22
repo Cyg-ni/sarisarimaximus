@@ -15,6 +15,6 @@ class MainActivity : AppCompatActivity() {
         btnWeekly?.setOnClickListener {
             startActivity(Intent(this, WeeklyTransactionsActivity::class.java))
         }
-
+        NavigationHandler.setupBottomNavBar(this)
     }
 }

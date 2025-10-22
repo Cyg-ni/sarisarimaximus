@@ -77,5 +77,6 @@ class SettingsActivity : AppCompatActivity() {
         navSettings.setOnClickListener {
             // Already in Settings — no action
         }
+
     }
 }
