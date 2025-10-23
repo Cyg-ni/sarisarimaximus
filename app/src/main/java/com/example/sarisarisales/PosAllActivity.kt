@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.example.sarisarisales.databinding.PosLoggingCombinedBinding
 
-class PosAllActivity : AppCompatActivity() {
+class
+PosAllActivity : AppCompatActivity() {
 
     private lateinit var binding: PosLoggingCombinedBinding
 
