@@ -42,6 +42,10 @@ android {
 }
 
 dependencies {
+
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
     // --- ADDED: Missing dependencies for XML layout components ---
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.12.0")
