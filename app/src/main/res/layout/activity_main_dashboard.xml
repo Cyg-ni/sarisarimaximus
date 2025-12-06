@@ -8,7 +8,6 @@
     android:background="@drawable/gradient_half_blue"
     tools:context=".MainActivity">
 
-    <!-- Top Header Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header_section"
         android:layout_width="match_parent"
@@ -62,7 +61,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Main Content Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/main_content_card"
         android:layout_width="0dp"
@@ -82,7 +80,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Store Dropdown Header -->
             <LinearLayout
                 android:id="@+id/store_dropdown_header"
                 android:layout_width="match_parent"
@@ -112,7 +109,6 @@
                     android:contentDescription="Dropdown Arrow"/>
             </LinearLayout>
 
-            <!-- Blue background for image and buttons -->
             <View
                 android:id="@+id/blue_background_view"
                 android:layout_width="0dp"
@@ -123,7 +119,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Sari-Sari Store Image -->
             <ImageView
                 android:id="@+id/sari_sari_store_image"
                 android:layout_width="200dp"
@@ -136,7 +131,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Action Buttons -->
             <Button
                 android:id="@+id/check_sales_button"
                 android:layout_width="wrap_content"
@@ -174,7 +168,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Bottom Navigation Bar -->
     <LinearLayout
         android:id="@+id/bottom_navigation_bar"
         android:layout_width="match_parent"
@@ -269,7 +262,6 @@
 
     </LinearLayout>
 
-    <!-- Dropdown Menu (initially hidden, would be shown programmatically) -->
     <androidx.cardview.widget.CardView
         android:id="@+id/store_dropdown_menu"
         android:layout_width="0dp"
@@ -280,9 +272,10 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="6dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/main_content_card"
+        app:layout_constraintTop_toTopOf="@id/main_content_card"
         app:layout_constraintStart_toStartOf="@id/main_content_card"
-        app:layout_constraintEnd_toEndOf="@id/main_content_card">
+        app:layout_constraintEnd_toEndOf="@id/main_content_card"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_bar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -308,7 +301,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_up"
-                android:contentDescription="Dropdown Arrow Up"/>
+                    android:contentDescription="Dropdown Arrow Up"/>
             </LinearLayout>
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0"/>
 

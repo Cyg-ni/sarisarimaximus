@@ -69,5 +69,6 @@
     <string name="ingredient_name_hint">Ingredient name</string>
     <string name="cost_hint">Cost</string>
     <string name="default_web_client_id">185870797972-l4shkjv4mrhv542h1qcgcscrh4skpfac.apps.googleusercontent.com</string>
+    <string name="hello_user_placeholder">Hello %1$s!</string>
 </resources>
 
