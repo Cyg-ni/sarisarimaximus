@@ -178,8 +178,8 @@
 
                     <!-- Product Item 5: Vinegar -->
                     <LinearLayout style="@style/ProductItemContainer">
-                        <ImageView style="@style/ProductImage" android:src="@drawable/vinegar" android:contentDescription="@string/piattos_cheese"/>
-                        <TextView style="@style/ProductTitle" android:text="@string/piattos_cheese"/>
+                        <ImageView style="@style/ProductImage" android:src="@drawable/vinegar" android:contentDescription="@string/silver_swan_vinegar"/>
+                        <TextView style="@style/ProductTitle" android:text="@string/silver_swan_vinegar"/>
                     </LinearLayout>
 
                     <!-- Add new item button -->
