@@ -2,26 +2,72 @@ package com.example.sarisarisales
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
+import android.widget.GridLayout
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
 import com.example.sarisarisales.databinding.PosLoggingCombinedBinding
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
-class
-PosAllActivity : AppCompatActivity() {
+
+data class CartItem(
+    val product: ProductData,
+    var quantity: Int
+)
+
+object CartRepository {
+    var currentCart: List<CartItem> = emptyList()
+}
+
+class PosAllActivity : AppCompatActivity() {
 
     private lateinit var binding: PosLoggingCombinedBinding
+    private val db = Firebase.firestore
+
+    private val cartList = mutableListOf<CartItem>()
+    private lateinit var stringToGridMap: Map<String, GridLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PosLoggingCombinedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeGridMap()
+        setupTabNavigation()
+        fetchProductsFromFirestore()
+        setupClickListenersForExistingItems()
+
+        binding.btnCart.setOnClickListener {
+            if (cartList.isNotEmpty()) {
+                val intent = Intent(this, TransactionsActivity::class.java)
+                CartRepository.currentCart = cartList
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Cart is empty", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        NavigationHandler.setupBottomNavBar(this)
+    }
+
+    private fun initializeGridMap() {
+        stringToGridMap = mapOf(
+            "Condiments" to (binding.gridCondiments.getChildAt(0) as GridLayout),
+            "Drinks" to (binding.gridDrinks.getChildAt(0) as GridLayout),
+            "JunkFood" to (binding.gridJunkFood.getChildAt(0) as GridLayout),
+            "Bread" to (binding.gridBread.getChildAt(0) as GridLayout),
+            "CannedGoods" to (binding.gridCannedGoods.getChildAt(0) as GridLayout),
+            "All" to (binding.gridAll.getChildAt(0) as GridLayout)
+        )
+    }
+
+    private fun setupTabNavigation() {
         val tabs = mapOf(
             binding.tvAll to binding.gridAll,
             binding.tvCondiments to binding.gridCondiments,
@@ -33,57 +79,106 @@ PosAllActivity : AppCompatActivity() {
 
         tabs.forEach { (tab, grid) ->
             tab.setOnClickListener {
-                // Hide all grids
                 tabs.values.forEach { it.visibility = View.GONE }
-
-                // Show selected grid
                 grid.visibility = View.VISIBLE
-
-                // Reset all tabs to normal style
                 tabs.keys.forEach { it.setTextAppearance(R.style.CategoryTabNormal) }
-
-                // Highlight selected tab
                 tab.setTextAppearance(R.style.CategoryTabActive)
             }
         }
-
-        setupProductClickListeners()
-
-        binding.btnCart.setOnClickListener {
-            val intent = Intent(this, TransactionsActivity::class.java)
-            startActivity(intent)
-        }
-        NavigationHandler.setupBottomNavBar(this)
     }
-    private fun setupProductClickListeners() {
-        // A list of all the parent layouts (ScrollViews) that contain our product grids
-        val categoryGrids = listOf(
-            binding.gridAll,
-            binding.gridCondiments,
-            binding.gridDrinks,
-            binding.gridJunkFood,
-            binding.gridBread,
-            binding.gridCannedGoods
-        )
 
-        // Loop through each category's scroll view
-        categoryGrids.forEach { scrollView ->
-            // The GridLayout is the first (and only) child of the ScrollView
-            val gridLayout = scrollView.getChildAt(0) as? ViewGroup ?: return@forEach
+    private fun fetchProductsFromFirestore() {
+        db.collection("products")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    try {
+                        val product = document.toObject(ProductData::class.java)
+                        product.id = document.id
 
-            // Loop through each item inside the GridLayout (these are the LinearLayouts)
-            gridLayout.children.forEach { productContainer ->
-                // Check if the container is a LinearLayout
-                if (productContainer is LinearLayout) {
-                    // We identify a "product" if its first child is an ImageView.
-                    // The "Add New" button's first child is a FrameLayout, so it will be ignored.
-                    if (productContainer.childCount > 0 && productContainer.getChildAt(0) is ImageView) {
-                        productContainer.setOnClickListener {
-                            Toast.makeText(this, "Item added to cart!", Toast.LENGTH_SHORT).show()
+                        if (product.category != "All") {
+                            val specificGrid = stringToGridMap[product.category]
+                            if (specificGrid != null) {
+                                addItemToGrid(product, specificGrid)
+                            }
                         }
+
+                        val allGrid = stringToGridMap["All"]
+                        if (allGrid != null) {
+                            addItemToGrid(product, allGrid)
+                        }
+
+                    } catch (e: Exception) {
+                        Log.e("Firestore", "Error parsing product", e)
                     }
                 }
             }
+    }
+
+    private fun addItemToGrid(product: ProductData, grid: GridLayout) {
+        for (i in 0 until grid.childCount) {
+            val child = grid.getChildAt(i)
+            val tag = child.tag as? ProductData
+            if (tag != null && tag.id == product.id) return
+        }
+
+        val itemView = LayoutInflater.from(this).inflate(R.layout.product_item, grid, false)
+        val title = itemView.findViewById<TextView>(R.id.productTitle)
+        title.text = product.name
+
+        itemView.tag = product
+
+        itemView.setOnClickListener {
+            addToCart(product)
+        }
+
+        grid.addView(itemView)
+    }
+
+    private fun setupClickListenersForExistingItems() {
+        stringToGridMap.values.forEach { grid ->
+            for (i in 0 until grid.childCount) {
+                val child = grid.getChildAt(i)
+                if (child.tag == null && child is LinearLayout) {
+
+                    var extractedName = "Unknown Item"
+
+                    fun findTextView(view: View): TextView? {
+                        if (view is TextView) return view
+                        if (view is ViewGroup) {
+                            for (k in 0 until view.childCount) {
+                                val result = findTextView(view.getChildAt(k))
+                                if (result != null) return result
+                            }
+                        }
+                        return null
+                    }
+
+                    val nameTv = findTextView(child)
+                    if (nameTv != null) {
+                        extractedName = nameTv.text.toString()
+                    }
+
+                    val dummyProduct = ProductData(name = extractedName, finalCost = 0.0, id = "")
+
+                    child.setOnClickListener {
+                        addToCart(dummyProduct)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addToCart(product: ProductData) {
+        val existingItem = cartList.find { it.product.id == product.id && product.id.isNotEmpty() }
+            ?: cartList.find { it.product.name == product.name && product.id.isEmpty() }
+
+        if (existingItem != null) {
+            existingItem.quantity++
+            Toast.makeText(this, "${product.name} added (Qty: ${existingItem.quantity})", Toast.LENGTH_SHORT).show()
+        } else {
+            cartList.add(CartItem(product, quantity = 1))
+            Toast.makeText(this, "${product.name} added (Qty: 1)", Toast.LENGTH_SHORT).show()
         }
     }
 }
