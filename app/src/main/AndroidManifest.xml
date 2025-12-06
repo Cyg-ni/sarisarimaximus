@@ -82,6 +82,11 @@
             android:exported="false"
             android:theme="@style/Theme.SariSariSales" />
 
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SariSariSales" />
+
     </application>
 
 </manifest>
