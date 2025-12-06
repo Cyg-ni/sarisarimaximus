@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <!-- Background Image -->
     <ImageView
         android:id="@+id/iv_background"
         android:layout_width="0dp"
@@ -18,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="Background image of a store" />
 
-    <!-- Blue Tint Overlay -->
     <View
         android:id="@+id/view_overlay"
         android:layout_width="0dp"
@@ -29,7 +27,6 @@
         app:layout_constraintStart_toStartOf="@id/iv_background"
         app:layout_constraintTop_toTopOf="@id/iv_background" />
 
-    <!-- Guideline to position the login card -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_top"
         android:layout_width="wrap_content"
@@ -37,11 +34,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.25" />
 
-    <!--
-    FIX #2: ScrollView added here.
-    This ensures that on smaller screens, the user can scroll down
-    to see and interact with all the fields, including the "New User?" button.
-    -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,16 +44,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline_top">
 
-        <!-- A ScrollView can only have one direct child -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="32dp">
 
-            <!--
-            FIX #1: Header wrapper (LinearLayout).
-            This groups the title and icon, allowing us to center them together easily.
-            -->
             <LinearLayout
                 android:id="@+id/ll_header"
                 android:layout_width="wrap_content"
@@ -95,7 +82,6 @@
             </LinearLayout>
 
 
-            <!-- Email Label -->
             <TextView
                 android:id="@+id/tv_label_email"
                 android:layout_width="wrap_content"
@@ -106,7 +92,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ll_header" />
 
-            <!-- Email Input Field -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_email"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -126,7 +111,6 @@
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Password Label -->
             <TextView
                 android:id="@+id/tv_label_password"
                 android:layout_width="wrap_content"
@@ -137,7 +121,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_email" />
 
-            <!-- Password Input Field -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_password"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -152,13 +135,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"  android:layout_height="wrap_content"
                     android:hint="Password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Forgot Password Link -->
             <TextView
                 android:id="@+id/tv_forgot_password"
                 android:layout_width="wrap_content"
@@ -170,7 +151,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_password" />
 
-            <!-- Sign In Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_in"
                 android:layout_width="0dp"
@@ -185,18 +165,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_forgot_password" />
 
-            <!-- New User Link -->
+            <TextView
+                android:id="@+id/tv_or_separator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="OR"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_sign_in" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/btn_google_sign_in"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_or_separator" />
+
             <TextView
                 android:id="@+id/tv_new_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:padding="4dp"
-                android:text="New User?"
-                android:textColor="@android:color/darker_gray"
+                android:text="New User? Sign Up Here"
+                android:textColor="#6776F0"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_sign_in" />
+                app:layout_constraintTop_toBottomOf="@id/btn_google_sign_in" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
