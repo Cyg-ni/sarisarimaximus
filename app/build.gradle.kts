@@ -42,6 +42,11 @@ android {
 }
 
 dependencies {
+    // --- ADDED: Missing dependencies for XML layout components ---
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.android.material:material:1.12.0")
+
+    // --- EXISTING dependencies ---
     implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.androidx.core.ktx)
