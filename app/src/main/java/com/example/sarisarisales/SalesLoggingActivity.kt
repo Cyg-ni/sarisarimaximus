@@ -3,6 +3,7 @@ package com.example.sarisarisales
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,30 +16,78 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sarisarisales.databinding.SalesLoggingAllBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
-// Data Classes
-data class IngredientData(val name: String, val cost: Double)
+data class IngredientData(
+    val name: String = "",
+    val cost: Double = 0.0
+)
+
 data class ProductData(
-    val name: String,
-    val originalCost: Double,
-    val markup: Double,
-    val ingredients: List<IngredientData>,
-    val finalCost: Double
+    var id: String = "",
+    val name: String = "",
+    val originalCost: Double = 0.0,
+    val markup: Double = 0.0,
+    val ingredients: List<IngredientData> = emptyList(),
+    val finalCost: Double = 0.0,
+    val category: String = "All"
 )
 
 class SalesLoggingActivity : AppCompatActivity() {
     private lateinit var binding: SalesLoggingAllBinding
     private var activeGrid: GridLayout? = null
+    private lateinit var db: FirebaseFirestore
+
+    private lateinit var categoryMap: Map<GridLayout, String>
+    private lateinit var stringToGridMap: Map<String, GridLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SalesLoggingAllBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        db = Firebase.firestore
 
+        initializeCategoryMaps()
+        setupTabNavigation()
+        setupAddItemButtons()
+        setupClickListenersForExistingItems()
+        fetchProductsFromFirestore()
+        NavigationHandler.setupBottomNavBar(this)
+    }
+
+    private fun initializeCategoryMaps() {
+        val gridCondiments = binding.gridCondiments.getChildAt(0) as GridLayout
+        val gridDrinks = binding.gridDrinks.getChildAt(0) as GridLayout
+        val gridJunkFood = binding.gridJunkFood.getChildAt(0) as GridLayout
+        val gridBread = binding.gridBread.getChildAt(0) as GridLayout
+        val gridCanned = binding.gridCannedGoods.getChildAt(0) as GridLayout
+        val gridAll = binding.gridAll.getChildAt(0) as GridLayout
+
+        categoryMap = mapOf(
+            gridCondiments to "Condiments",
+            gridDrinks to "Drinks",
+            gridJunkFood to "JunkFood",
+            gridBread to "Bread",
+            gridCanned to "CannedGoods",
+            gridAll to "All"
+        )
+
+        stringToGridMap = mapOf(
+            "Condiments" to gridCondiments,
+            "Drinks" to gridDrinks,
+            "JunkFood" to gridJunkFood,
+            "Bread" to gridBread,
+            "CannedGoods" to gridCanned,
+            "All" to gridAll
+        )
+    }
+
+    private fun setupTabNavigation() {
         activeGrid = binding.gridAll.getChildAt(0) as? GridLayout
 
-        // 1. Setup Tabs
         val tabs = mapOf(
             binding.tvAll to binding.gridAll,
             binding.tvCondiments to binding.gridCondiments,
@@ -57,32 +106,53 @@ class SalesLoggingActivity : AppCompatActivity() {
                 tab.setTextAppearance(R.style.CategoryTabActive)
             }
         }
+    }
 
-        // 2. Setup the "Add (+)" Buttons
-        setupAddItemButtons()
+    private fun fetchProductsFromFirestore() {
+        db.collection("products")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    try {
+                        val product = document.toObject(ProductData::class.java)
+                        product.id = document.id
 
-        // 3. Setup listeners for items that already exist in the XML
-        setupClickListenersForExistingItems()
+                        val targetGrid = stringToGridMap[product.category] ?: binding.gridAll.getChildAt(0) as GridLayout
+                        addItemToGrid(product, targetGrid)
+                    } catch (e: Exception) {
+                        Log.e("Firestore", "Error parsing product", e)
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error loading data: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
 
-        NavigationHandler.setupBottomNavBar(this)
+    private fun saveProductToFirestore(product: ProductData, isEdit: Boolean, onSuccess: (String) -> Unit) {
+        if (isEdit && product.id.isNotEmpty()) {
+            db.collection("products").document(product.id)
+                .set(product)
+                .addOnSuccessListener { onSuccess(product.id) }
+                .addOnFailureListener { e -> Toast.makeText(this, "Update failed: ${e.message}", Toast.LENGTH_SHORT).show() }
+        } else {
+            db.collection("products")
+                .add(product)
+                .addOnSuccessListener { documentReference -> onSuccess(documentReference.id) }
+                .addOnFailureListener { e -> Toast.makeText(this, "Save failed: ${e.message}", Toast.LENGTH_SHORT).show() }
+        }
     }
 
     private fun setupClickListenersForExistingItems() {
-        val grids = listOf(
-            binding.gridAll,
-            binding.gridCondiments,
-            binding.gridDrinks,
-            binding.gridJunkFood,
-            binding.gridBread,
-            binding.gridCannedGoods
-        )
+        val grids = listOf(binding.gridAll, binding.gridCondiments, binding.gridDrinks, binding.gridJunkFood, binding.gridBread, binding.gridCannedGoods)
 
         grids.forEach { scrollView ->
             val grid = scrollView.getChildAt(0) as? GridLayout
             if (grid != null) {
-                val itemCount = if (grid.childCount > 0) grid.childCount - 1 else 0
+                val hasAddButton = grid.childCount > 0 && grid.getChildAt(grid.childCount - 1).hasOnClickListeners()
+                val limit = if (hasAddButton) grid.childCount - 1 else grid.childCount
 
-                for (i in 0 until itemCount) {
+                for (i in 0 until limit) {
                     val itemContainer = grid.getChildAt(i)
                     if (itemContainer.tag == null) {
                         var productName = "Unknown Item"
@@ -95,15 +165,7 @@ class SalesLoggingActivity : AppCompatActivity() {
                                 }
                             }
                         }
-
-                        val dummyData = ProductData(
-                            name = productName,
-                            originalCost = 0.0,
-                            markup = 0.0,
-                            ingredients = emptyList(),
-                            finalCost = 0.0
-                        )
-
+                        val dummyData = ProductData(name = productName, category = "Unknown")
                         itemContainer.tag = dummyData
                         itemContainer.setOnClickListener { view ->
                             val data = view.tag as? ProductData
@@ -116,37 +178,23 @@ class SalesLoggingActivity : AppCompatActivity() {
     }
 
     private fun setupAddItemButtons() {
-        val grids = listOf(
-            binding.gridCondiments,
-            binding.gridDrinks,
-            binding.gridJunkFood,
-            binding.gridBread,
-            binding.gridCannedGoods
-        )
-
+        val grids = listOf(binding.gridCondiments, binding.gridDrinks, binding.gridJunkFood, binding.gridBread, binding.gridCannedGoods)
         grids.forEach { scrollView ->
             (scrollView.getChildAt(0) as? GridLayout)?.let { grid ->
                 if (grid.childCount > 0) {
                     val addButton = grid.getChildAt(grid.childCount - 1)
                     addButton.setOnClickListener {
-                        // Pass null for edit mode args to indicate "Add New"
-                        showAddItemDialog(null, null)
+                        val category = categoryMap[grid] ?: "All"
+                        showAddItemDialog(null, null, category)
                     }
                 }
             }
         }
     }
 
-    /**
-     * This function handles both ADDING new items and EDITING existing items.
-     * @param productToEdit: If provided, pre-fills the form.
-     * @param itemContainer: If provided, updates this view instead of creating a new one.
-     */
-    private fun showAddItemDialog(productToEdit: ProductData?, itemContainer: View?) {
+    private fun showAddItemDialog(productToEdit: ProductData?, itemContainer: View?, categoryOverride: String? = null) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_add_item, null)
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setView(dialogView)
-            .create()
+        val dialog = MaterialAlertDialogBuilder(this).setView(dialogView).create()
 
         val etItemName = dialogView.findViewById<EditText>(R.id.et_item_name)
         val etOriginalCost = dialogView.findViewById<EditText>(R.id.et_original_cost)
@@ -160,7 +208,6 @@ class SalesLoggingActivity : AppCompatActivity() {
 
         val currentIngredients = mutableListOf<IngredientData>()
 
-        // --- Helper to add row to UI ---
         fun addIngredientRow(name: String, cost: Double) {
             val rowLayout = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
@@ -179,7 +226,6 @@ class SalesLoggingActivity : AppCompatActivity() {
             llIngredientList.addView(rowLayout)
         }
 
-        // --- CALCULATION LOGIC ---
         val calculateTotalCost = {
             val originalCost = etOriginalCost.text.toString().toDoubleOrNull() ?: 0.0
             val markupPercent = etMarkup.text.toString().toDoubleOrNull() ?: 0.0
@@ -197,46 +243,34 @@ class SalesLoggingActivity : AppCompatActivity() {
         etOriginalCost.addTextChangedListener(textWatcher)
         etMarkup.addTextChangedListener(textWatcher)
 
-        // --- PRE-FILL DATA IF EDITING ---
         if (productToEdit != null) {
             etItemName.setText(productToEdit.name)
             etOriginalCost.setText(productToEdit.originalCost.toString())
             etMarkup.setText(productToEdit.markup.toString())
-
-            // Re-populate ingredients
             productToEdit.ingredients.forEach {
                 currentIngredients.add(it)
                 addIngredientRow(it.name, it.cost)
             }
             calculateTotalCost()
-
-            // Change button text
             btnListItem.text = "Save Changes"
         }
 
-        // --- ADD INGREDIENT BUTTON ---
         btnAddIngredient.setOnClickListener {
             val name = etIngredientName.text.toString().trim()
             val costStr = etIngredientCost.text.toString().trim()
-
             if (name.isNotEmpty() && costStr.isNotEmpty()) {
                 val cost = costStr.toDoubleOrNull()
                 if (cost != null) {
                     currentIngredients.add(IngredientData(name, cost))
                     addIngredientRow(name, cost)
-
                     etIngredientName.text.clear()
                     etIngredientCost.text.clear()
                     etIngredientName.requestFocus()
                     calculateTotalCost()
                 } else { etIngredientCost.error = "Invalid cost" }
-            } else {
-                if (name.isEmpty()) etIngredientName.error = "Name required"
-                if (costStr.isEmpty()) etIngredientCost.error = "Cost required"
             }
         }
 
-        // --- SAVE/LIST ITEM BUTTON ---
         btnListItem.setOnClickListener {
             val itemName = etItemName.text.toString().trim()
             val originalCost = etOriginalCost.text.toString().toDoubleOrNull() ?: 0.0
@@ -244,62 +278,65 @@ class SalesLoggingActivity : AppCompatActivity() {
             val finalCost = etTotalCost.text.toString().toDoubleOrNull() ?: 0.0
 
             if (itemName.isNotEmpty()) {
-                val newProductData = ProductData(
+                val categoryToSave = categoryOverride ?: productToEdit?.category ?: "All"
+
+                val productData = ProductData(
+                    id = productToEdit?.id ?: "",
                     name = itemName,
                     originalCost = originalCost,
                     markup = markup,
                     ingredients = currentIngredients.toList(),
-                    finalCost = finalCost
+                    finalCost = finalCost,
+                    category = categoryToSave
                 )
 
-                if (productToEdit == null) {
-                    // MODE: ADD NEW
-                    activeGrid?.let { grid ->
-                        addItemToGrid(newProductData, grid)
-                        Toast.makeText(this, "Item added", Toast.LENGTH_SHORT).show()
+                val isEdit = productToEdit != null
+                saveProductToFirestore(productData, isEdit) { savedId ->
+                    productData.id = savedId
+                    if (!isEdit) {
+                        val targetGrid = stringToGridMap[categoryToSave] ?: binding.gridAll.getChildAt(0) as GridLayout
+                        addItemToGrid(productData, targetGrid)
+                    } else {
+                        itemContainer?.tag = productData
+                        val titleView = itemContainer?.findViewById<TextView>(R.id.productTitle)
+                        titleView?.text = itemName
                     }
-                } else {
-                    // MODE: EDIT EXISTING
-                    // Update the tag data
-                    itemContainer?.tag = newProductData
-                    // Update the text in the UI
-                    val titleView = itemContainer?.findViewById<TextView>(R.id.productTitle)
-                    titleView?.text = itemName
-                    Toast.makeText(this, "Item updated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, if (isEdit) "Item updated" else "Item saved", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
                 }
-
-                dialog.dismiss()
             } else {
                 etItemName.error = "Item name cannot be empty"
             }
         }
-
         dialog.show()
     }
 
     private fun addItemToGrid(productData: ProductData, targetGrid: GridLayout) {
+        for (i in 0 until targetGrid.childCount) {
+            val child = targetGrid.getChildAt(i)
+            val tag = child.tag as? ProductData
+            if (tag != null && tag.id == productData.id && productData.id.isNotEmpty()) {
+                return
+            }
+        }
+
         val newItemView = LayoutInflater.from(this).inflate(R.layout.product_item, targetGrid, false)
         val productTitle = newItemView.findViewById<TextView>(R.id.productTitle)
 
         productTitle.text = productData.name
         newItemView.tag = productData
-
         newItemView.setOnClickListener { view ->
             val savedData = view.tag as? ProductData
-            if (savedData != null) {
-                showProductDetailsDialog(savedData, view)
-            }
+            if (savedData != null) showProductDetailsDialog(savedData, view)
         }
 
-        val insertIndex = targetGrid.childCount - 1
+        val insertIndex = if (targetGrid.childCount > 0) targetGrid.childCount - 1 else 0
         targetGrid.addView(newItemView, insertIndex)
     }
 
     private fun showProductDetailsDialog(product: ProductData, itemContainer: View) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_product_details, null)
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setView(dialogView)
-            .create()
+        val dialog = MaterialAlertDialogBuilder(this).setView(dialogView).create()
 
         val tvName = dialogView.findViewById<TextView>(R.id.tv_view_product_name)
         val tvOriginalCost = dialogView.findViewById<TextView>(R.id.tv_view_original_cost)
@@ -307,7 +344,7 @@ class SalesLoggingActivity : AppCompatActivity() {
         val tvTotalCost = dialogView.findViewById<TextView>(R.id.tv_view_total_cost)
         val llIngredients = dialogView.findViewById<LinearLayout>(R.id.ll_view_ingredients_list)
         val btnClose = dialogView.findViewById<Button>(R.id.btn_close_details)
-        val btnEdit = dialogView.findViewById<Button>(R.id.btn_edit_details) // New Button
+        val btnEdit = dialogView.findViewById<Button>(R.id.btn_edit_details)
 
         tvName.text = product.name
         tvOriginalCost.text = String.format(Locale.US, "%.2f", product.originalCost)
@@ -340,16 +377,11 @@ class SalesLoggingActivity : AppCompatActivity() {
             }
         }
 
-        // EDIT BUTTON CLICK LISTENER
         btnEdit.setOnClickListener {
-            dialog.dismiss() // Close the View Details dialog
-            // Open the Add/Edit dialog, passing the current data and the view to be updated
+            dialog.dismiss()
             showAddItemDialog(product, itemContainer)
         }
-
-        btnClose.setOnClickListener {
-            dialog.dismiss()
-        }
+        btnClose.setOnClickListener { dialog.dismiss() }
 
         dialog.show()
     }
