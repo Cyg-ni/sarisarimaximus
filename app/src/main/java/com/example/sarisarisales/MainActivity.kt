@@ -29,11 +29,11 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize elements
         storeDropdownHeader = findViewById(R.id.store_dropdown_header)
-        dropdownArrow = findViewById(R.id.dropdown_arrow)
+        dropdownArrow = findViewById(R.id.dropdownArrow)
         storeDropdownMenu = findViewById(R.id.store_dropdown_menu)
 
-        checkSalesButton = findViewById(R.id.check_sales_button)
-        manageItemsButton = findViewById(R.id.manage_items_button)
+        checkSalesButton = findViewById(R.id.checkSalesButton)
+        manageItemsButton = findViewById(R.id.manageItemsButton)
 
         navHome = findViewById(R.id.navHome)
         navLogging = findViewById(R.id.navLogging)

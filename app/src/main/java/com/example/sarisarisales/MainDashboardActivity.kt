@@ -1,134 +1,293 @@
 package com.example.sarisarisales
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sarisarisales.databinding.ActivityMainDashboardBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
+// Data class to represent a store
+data class Store(
+    val id: String = "",
+    val name: String = "",
+    val ownerId: String = ""
+)
 
 class MainDashboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainDashboardBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
+    private val userStores = mutableListOf<Store>()
+    private var currentStoreId: String? = null // Must be 'var' for reassignment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize View Binding for activity_main_dashboard.xml
+        // Initialize View Binding
         binding = ActivityMainDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Firebase Auth
+        // Initialize Firebase Auth and Firestore
         auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
-        // 1. Update the Greeting Text with the User's Name
         updateGreeting()
-
-        // 2. Set up Navigational Click Listeners
+        loadUserStores()
         setupActionListeners()
-
-        // 3. Set up Bottom Navigation Bar
-        setupBottomNavListeners()
     }
 
-    /**
-     * Retrieves the user's name from Firebase and updates the greeting TextView.
-     */
     private fun updateGreeting() {
         val user = auth.currentUser
-        val userName = user?.displayName
+        val email = user?.email?.split("@")?.get(0) ?: "User"
+        binding.greetingText.text = "Hello $email!"
+    }
 
-        if (!userName.isNullOrEmpty()) {
-            // Uses the string resource defined in strings.xml: <string name="hello_user_placeholder">Hello %1$s!</string>
-            // %1$s is the placeholder for the user's name.
-            binding.greetingText.text = getString(R.string.hello_user_placeholder, userName)
+    private fun loadUserStores() {
+        val userId = auth.currentUser?.uid ?: return
+
+        db.collection("stores")
+            .whereEqualTo("ownerId", userId)
+            .get()
+            .addOnSuccessListener { result ->
+                userStores.clear()
+
+                for (document in result) {
+                    val store = document.toObject(Store::class.java).copy(id = document.id)
+                    userStores.add(store)
+                }
+
+                if (userStores.isNotEmpty()) {
+                    currentStoreId = userStores.first().id
+                }
+
+                updateStoreDisplay()
+                populateDropdownMenu()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to load stores: ${e.message}", Toast.LENGTH_LONG).show()
+                updateStoreDisplay()
+            }
+    }
+
+    private fun updateStoreDisplay() {
+        val currentStore = userStores.find { it.id == currentStoreId }
+
+        if (currentStore != null) {
+            binding.storeNameText.text = "Store: ${currentStore.name}"
+            binding.storeDropdownHeader.isEnabled = true
+            binding.dropdownArrow.visibility = View.VISIBLE
         } else {
-            // Fallback if no display name is set
-            binding.greetingText.text = "Hello there!"
+            binding.storeNameText.text = "Store: Set Up Your First Store"
+            binding.storeDropdownHeader.isEnabled = true
+            binding.dropdownArrow.visibility = View.INVISIBLE
         }
     }
 
-    /**
-     * Sets listeners for the main action buttons and the menu/logout icon.
-     */
+    // --- Store Dropdown Logic ---
+
+    private fun populateDropdownMenu() {
+        binding.dropdownOptionsContainer.removeAllViews()
+
+        val context = this
+
+        userStores.forEach { store ->
+            val storeView = createDropdownOption(
+                context,
+                store.name,
+                R.color.colorPrimary,
+                R.dimen.padding_12dp
+            )
+            storeView.setOnClickListener {
+                currentStoreId = store.id
+                updateStoreDisplay()
+                binding.storeDropdownMenu.visibility = View.GONE
+            }
+            binding.dropdownOptionsContainer.addView(storeView)
+
+            if (userStores.indexOf(store) < userStores.size - 1) {
+                binding.dropdownOptionsContainer.addView(createSeparator(context))
+            }
+        }
+
+        if (userStores.isNotEmpty()) {
+            binding.dropdownOptionsContainer.addView(createSeparator(context))
+        }
+
+        // The "Add New Store" button
+        val addStoreView = createDropdownOption(
+            context,
+            "Add New Store",
+            R.color.colorPrimary,
+            R.dimen.padding_12dp,
+            R.drawable.ic_add_store
+        )
+        addStoreView.setOnClickListener {
+            binding.storeDropdownMenu.visibility = View.GONE
+            showAddStoreDialog()
+        }
+        binding.dropdownOptionsContainer.addView(addStoreView)
+    }
+
+    private fun createDropdownOption(
+        context: Context,
+        optionText: String, // Corrected parameter name
+        textColorResId: Int,
+        paddingResId: Int,
+        iconResId: Int? = null
+    ): TextView {
+        return TextView(context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            text = optionText // Correct assignment
+            setPadding(resources.getDimensionPixelSize(paddingResId), 0, resources.getDimensionPixelSize(paddingResId), 0)
+            setTextColor(context.getColor(textColorResId))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            gravity = Gravity.CENTER_VERTICAL
+            minHeight = resources.getDimensionPixelSize(R.dimen.padding_12dp) * 2
+
+            iconResId?.let {
+                setCompoundDrawablesWithIntrinsicBounds(it, 0, 0, 0)
+                compoundDrawablePadding = resources.getDimensionPixelSize(R.dimen.padding_12dp) / 2
+            }
+        }
+    }
+
+    private fun createSeparator(context: Context): View {
+        return View(context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                resources.getDimensionPixelSize(R.dimen.separator_height)
+            )
+            setBackgroundColor(context.getColor(R.color.light_gray_separator))
+        }
+    }
+
+    // Function that displays the dialog to collect the new store name
+    private fun showAddStoreDialog() {
+        val input = EditText(this).apply {
+            setHint("Enter Store Name (e.g., Sari-Sari Max)")
+            setSingleLine(true)
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Add New Store")
+            .setView(input)
+            .setPositiveButton("Add") { _, _ ->
+                val storeName = input.text.toString().trim()
+                if (storeName.isNotEmpty()) {
+                    addNewStore(storeName)
+                } else {
+                    Toast.makeText(this, "Store name cannot be empty.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    // Function that saves the new store to Firestore
+    private fun addNewStore(name: String) {
+        val userId = auth.currentUser?.uid ?: return
+
+        val newStore = Store(name = name, ownerId = userId)
+
+        db.collection("stores")
+            .add(newStore)
+            .addOnSuccessListener { documentReference ->
+                Toast.makeText(this, "Store '$name' added successfully!", Toast.LENGTH_SHORT).show()
+                val createdStore = newStore.copy(id = documentReference.id)
+                userStores.add(createdStore)
+                currentStoreId = createdStore.id
+
+                updateStoreDisplay()
+                populateDropdownMenu()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error adding store: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    // --- Action Button & Navigation Listeners ---
+
     private fun setupActionListeners() {
 
-        // Action Button: Check Sales (Navigate to WeeklyTransactionsActivity for reports)
-        binding.checkSalesButton.setOnClickListener {
-            // Assuming WeeklyTransactionsActivity is where sales data is reviewed
-            val intent = Intent(this, WeeklyTransactionsActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Action Button: Manage Items (Assuming this leads to an inventory/product management screen)
-        binding.manageItemsButton.setOnClickListener {
-            // Assuming ProductItemActivity handles inventory management
-            val intent = Intent(this, ProductItemActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Top Icon: Menu/Logout
         binding.menuIcon.setOnClickListener {
             showLogoutConfirmation()
         }
 
-        // Top Icon: Profile Icon (Could also lead to settings/profile)
         binding.profileIcon.setOnClickListener {
-            // Assuming SettingsAccountActivity shows user profile details
             val intent = Intent(this, SettingsAccountActivity::class.java)
             startActivity(intent)
         }
 
-        // Store Dropdown Header: Placeholder for multi-store selection logic
+        // Toggles the visibility of the floating menu card
         binding.storeDropdownHeader.setOnClickListener {
-            // Toggle visibility of the store dropdown menu
-            val menu = binding.storeDropdownMenu
-            menu.visibility = if (menu.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            if (binding.storeDropdownHeader.isEnabled) {
+                val menu = binding.storeDropdownMenu
+                menu.visibility = if (menu.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            }
         }
-    }
 
-    /**
-     * Sets listeners for the bottom navigation icons.
-     */
-    private fun setupBottomNavListeners() {
-        // Home is already the current activity, no action needed on navHome.
+        binding.checkSalesButton.setOnClickListener {
+            if (currentStoreId != null) {
+                val intent = Intent(this, WeeklyTransactionsActivity::class.java)
+                intent.putExtra("STORE_ID", currentStoreId)
+                startActivity(intent)
+            } else {
+                Snackbar.make(it, "Please set up or select a store first.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
 
-        // Logging (Sales Logging)
+        binding.manageItemsButton.setOnClickListener {
+            if (currentStoreId != null) {
+                val intent = Intent(this, ProductItemActivity::class.java)
+                intent.putExtra("STORE_ID", currentStoreId)
+                startActivity(intent)
+            } else {
+                Snackbar.make(it, "Please set up or select a store first.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.navHome.setOnClickListener {
+            Snackbar.make(it, "Already on Dashboard/Home", Snackbar.LENGTH_SHORT).show()
+        }
         binding.navLogging.setOnClickListener {
             val intent = Intent(this, SalesLoggingActivity::class.java)
             startActivity(intent)
         }
-
-        // POS (Point of Sale)
         binding.navPOS.setOnClickListener {
-            // Assuming PosDashboardActivity is your Point of Sale interface
             val intent = Intent(this, PosDashboardActivity::class.java)
             startActivity(intent)
         }
-
-        // Settings
         binding.navSettings.setOnClickListener {
-            // Assuming SettingsActivity is the main settings screen
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }
 
-    /**
-     * Shows an AlertDialog to confirm user logout.
-     */
+    // --- Logout Function ---
+
     private fun showLogoutConfirmation() {
         AlertDialog.Builder(this)
             .setTitle("Logout")
             .setMessage("Are you sure you want to log out?")
             .setPositiveButton("Logout") { _, _ ->
                 auth.signOut()
-                // Navigate back to the LoginActivity and clear the back stack
                 val intent = Intent(this, LoginActivity::class.java)
-                // These flags prevent the user from hitting the back button to return to the dashboard
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
                 Toast.makeText(this, "Logged out successfully.", Toast.LENGTH_SHORT).show()
